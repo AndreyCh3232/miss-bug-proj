@@ -1,4 +1,3 @@
-
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 
@@ -31,34 +30,40 @@ function save(bug) {
     } else {
         return storageService.post(STORAGE_KEY, bug)
     }
+
 }
-
-
-
 
 function _createBugs() {
     let bugs = utilService.loadFromStorage(STORAGE_KEY)
     if (!bugs || !bugs.length) {
         bugs = [
             {
+                _id: 'b101',
                 title: "Infinite Loop Detected",
+                description: "Occurs when function calls itself infinitely.",
                 severity: 4,
-                _id: "1NF1N1T3"
+                createdAt: Date.now(),
             },
             {
+                _id: 'b102',
                 title: "Keyboard Not Found",
+                description: "This issue arises when the computer can't find the keyboard.",
                 severity: 3,
-                _id: "K3YB0RD"
+                createdAt: Date.now(),
             },
             {
+                _id: 'b103',
                 title: "404 Coffee Not Found",
+                description: "Coffee not available, perhaps a missing coffee machine?",
                 severity: 2,
-                _id: "C0FF33"
+                createdAt: Date.now(),
             },
             {
+                _id: 'b104',
                 title: "Unexpected Response",
+                description: "Received an unexpected response from the server.",
                 severity: 1,
-                _id: "G0053"
+                createdAt: Date.now(),
             }
         ]
         utilService.saveToStorage(STORAGE_KEY, bugs)
