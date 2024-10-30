@@ -11,25 +11,27 @@ app.use(cookieParser())
 app.get('/', (req, res) => res.send('Hello there'))
 app.listen(3030, () => console.log('Server ready at port 3030'))
 
-app.get('/api/bug', (req, res) => {
-    const bugs = bugService.query()
-    res.send(bugs)
+app.get('/api/bug', async (req, res) => {
+    const bugs = await bugService.query()
+    res.json(bugs)
 })
 
-app.get('/api/bug/save', (req, res) => {
-    const bug = bugService.save(req.body)
-    res.send(bug)
+app.post('/api/bug/save', async (req, res) => {
+    const bug = req.body
+    const savedBug = await bugService.save(bug)
+    res.json(savedBug)
 })
 
-app.get('/api/bug/:bugId', (req, res) => {
-    const bug = bugService.getById(req.params.bugId)
-    res.send(bug)
-
+app.get('/api/bug/:bugId', async (req, res) => {
+    const { bugId } = req.params
+    const bug = await bugService.getById(bugId)
+    res.json(bug)
 })
 
-app.get('/api/bug/:bugId/remove', (req, res) => {
-    bugService.remove(req.params.bugId)
-    res.send({ msg: 'Bug removed successfully' })
+app.delete('/api/bug/:bugId/remove', async (req, res) => {
+    const { bugId } = req.params
+    await bugService.remove(bugId)
+    res.send('Bug removed')
 })
 
 app.get('/api/bug/:bugId', (req, res) => {
@@ -51,17 +53,21 @@ app.get('/api/bug/:bugId', (req, res) => {
     res.json(bug)
 })
 
-app.get('/api/bug/download/pdf', (req, res) => {
-    const doc = new PDFDocument()
-    let filename = 'bugs.pdf'
-    res.setHeader('Content-disposition', `attachment; filename=${filename}`)
-    res.setHeader('Content-type', 'application/pdf')
+app.get('/api/bug/download/pdf', async (req, res) => {
+    const bugs = await bugService.query()
 
-    doc.text('Bug List:', { align: 'center' })
-    bugs.forEach(bug => {
-        doc.text(`Title: ${bug.title}, Severity: ${bug.severity}`)
+    const doc = new PDFDocument()
+    res.setHeader('Content-Type', 'application/pdf')
+    doc.pipe(res)
+
+    doc.fontSize(25).text('Bug Report', { align: 'center' })
+    bugs.forEach((bug) => {
+        doc
+            .fontSize(14)
+            .text(`Bug ID: ${bug._id}`, { continued: true })
+            .text(` | Title: ${bug.title}`)
+            .moveDown(0.5)
     })
 
-    doc.pipe(res)
     doc.end()
 })

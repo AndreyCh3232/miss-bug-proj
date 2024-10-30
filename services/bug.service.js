@@ -68,7 +68,4 @@ function _createBugs() {
         ]
         utilService.saveToStorage(STORAGE_KEY, bugs)
     }
-
-
-
 }
