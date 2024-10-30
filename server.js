@@ -1,6 +1,7 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import { bugService } from './bug.service.js'
+import PDFDocument from 'pdfkit'
 
 const app = express()
 app.use(express.json())
@@ -48,4 +49,19 @@ app.get('/api/bug/:bugId', (req, res) => {
 
     const bug = bugService.getById(bugId)
     res.json(bug)
+})
+
+app.get('/api/bug/download/pdf', (req, res) => {
+    const doc = new PDFDocument()
+    let filename = 'bugs.pdf'
+    res.setHeader('Content-disposition', `attachment; filename=${filename}`)
+    res.setHeader('Content-type', 'application/pdf')
+
+    doc.text('Bug List:', { align: 'center' })
+    bugs.forEach(bug => {
+        doc.text(`Title: ${bug.title}, Severity: ${bug.severity}`)
+    })
+
+    doc.pipe(res)
+    doc.end()
 })
