@@ -94,7 +94,7 @@ export function BugIndex() {
       <section className="info-actions">
         <h3>Bugs App</h3>
         <BugFilter filterBy={filterBy} onSetFilterBy={onSetFilterBy} />
-        <button onClick={onAddBug}>Add Bug ⛐</button>
+        <button onClick={onAddBug}>Add Bug</button>
         <button onClick={onDownloadPdf}>Download PDF</button>
       </section>
       <main>

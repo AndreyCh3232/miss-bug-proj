@@ -39,28 +39,6 @@ app.delete('/api/bug/:bugId/remove', (req, res) => {
         })
 })
 
-
-app.get('/api/bug/:bugId', (req, res) => {
-    const { bugId } = req.params
-    let visitedBugs = req.cookies.visitedBugs || []
-
-    if (!visitedBugs.includes(bugId)) {
-        visitedBugs.push(bugId)
-        if (visitedBugs.length > 3) {
-            loggerService.warn(`User visited more than 3 bugs: ${visitedBugs}`)
-            return res.status(401).send('Wait for a bit')
-        }
-        res.cookie('visitedBugs', visitedBugs, { maxAge: 7000 })
-    }
-
-    bugService.getById(bugId)
-        .then(bug => res.send(bug))
-        .catch(err => {
-            loggerService.error(`Bug not found with ID: ${bugId}`, err)
-            res.status(404).send('Bug not found')
-        })
-})
-
 app.get('/api/bug/download', (req, res) => {
     const doc = new PDFDocument()
     let filename = 'bugs_report.pdf'
@@ -83,6 +61,27 @@ app.get('/api/bug/download', (req, res) => {
         .catch(err => {
             loggerService.error('Failed to generate PDF report', err)
             res.status(500).send('Failed to generate PDF')
+        })
+})
+
+app.get('/api/bug/:bugId', (req, res) => {
+    const { bugId } = req.params
+    let visitedBugs = req.cookies.visitedBugs || []
+
+    if (!visitedBugs.includes(bugId)) {
+        visitedBugs.push(bugId)
+        if (visitedBugs.length > 3) {
+            loggerService.warn(`User visited more than 3 bugs: ${visitedBugs}`)
+            return res.status(401).send('Wait for a bit')
+        }
+        res.cookie('visitedBugs', visitedBugs, { maxAge: 7000 })
+    }
+
+    bugService.getById(bugId)
+        .then(bug => res.send(bug))
+        .catch(err => {
+            loggerService.error(`Bug not found with ID: ${bugId}`, err)
+            res.status(404).send('Bug not found')
         })
 })
 
