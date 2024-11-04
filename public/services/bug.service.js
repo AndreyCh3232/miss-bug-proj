@@ -1,3 +1,4 @@
+
 export const bugService = {
   query,
   save,
@@ -36,15 +37,33 @@ function remove(bugId) {
 }
 
 function save(bug) {
-  const url = BASE_URL + 'save'
-  let queryParams = `?title=${bug.title}&severity=${bug.severity}&description=${bug.description}`
-  if (bug._id) queryParams += `&_id=${bug._id}`
-  return axios
-    .get(url + queryParams)
-    .then((res) => res.data)
-    .catch((err) => {
-      console.log('err:', err)
-    })
+  // const url = BASE_URL + 'save'
+  // let queryParams = `?title=${bug.title}&severity=${bug.severity}&description=${bug.description}`
+  // if (bug._id) queryParams += `&_id=${bug._id}`
+  // return axios
+  //   .get(url + queryParams)
+  //   .then((res) => res.data)
+  //   .catch((err) => {
+  //     console.log('err:', err)
+  //   })
+
+  if (bug._id) {
+    return axios
+      .put(`${BASE_URL}${bug._id}`, bug)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error('Error updating bug:', err)
+        throw err;
+      })
+  } else {
+    return axios
+      .post(BASE_URL, bug)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error('Error adding new bug:', err)
+        throw err
+      })
+  }
 }
 
 function getDefaultFilter() {

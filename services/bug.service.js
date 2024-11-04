@@ -11,7 +11,7 @@ export const bugService = {
     remove,
 }
 
-function query({ sortBy, sortDir, pageIdx, pageSize, txt, minSeverity, labels }) {
+function query({ sortBy, sortDir, pageIdx, pageSize, txt, minSeverity, labels } = {}) {
     var filteredBugs = bugs
 
     // Filtering

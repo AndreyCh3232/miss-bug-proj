@@ -19,7 +19,7 @@ app.get('/api/bug', (req, res) => {
         })
 })
 
-app.post('/api/bug/save', (req, res) => {
+app.post('/api/bug', (req, res) => {
     const bug = req.body
     bugService.save(bug)
         .then(savedBug => res.send(savedBug))
@@ -29,7 +29,7 @@ app.post('/api/bug/save', (req, res) => {
         })
 })
 
-app.delete('/api/bug/:bugId/remove', (req, res) => {
+app.delete('/api/bug/:bugId', (req, res) => {
     const { bugId } = req.params
     bugService.remove(bugId)
         .then(() => res.send('Bug removed'))
@@ -86,13 +86,24 @@ app.get('/api/bug/:bugId', (req, res) => {
 })
 
 app.get('/api/bug', (req, res) => {
-    const { sortBy, sortDir = 1, pageIdx = 0, pageSize = 10, txt, minSeverity, labels } = req.query
+    const { sortBy, sortDir = 1, pageIdx = 0, pageSize = 5, txt, minSeverity, labels } = req.query
 
     bugService.query({ sortBy, sortDir, pageIdx, pageSize, txt, minSeverity, labels })
         .then(bugs => res.send(bugs))
         .catch(err => {
             loggerService.error('Failed to query bugs', err)
             res.status(500).send('Cannot get bugs')
+        })
+})
+
+app.put('/api/bug/:bugId', (req, res) => {
+    const { bugId } = req.params
+    const bug = req.body
+    bugService.save({ ...bug, _id: bugId })
+        .then(updatedBug => res.send(updatedBug))
+        .catch(err => {
+            loggerService.error('Failed to update bug', err)
+            res.status(500).send('Cannot update bug')
         })
 })
 
