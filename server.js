@@ -85,6 +85,17 @@ app.get('/api/bug/:bugId', (req, res) => {
         })
 })
 
+app.get('/api/bug', (req, res) => {
+    const { sortBy, sortDir = 1, pageIdx = 0, pageSize = 10, txt, minSeverity, labels } = req.query
+
+    bugService.query({ sortBy, sortDir, pageIdx, pageSize, txt, minSeverity, labels })
+        .then(bugs => res.send(bugs))
+        .catch(err => {
+            loggerService.error('Failed to query bugs', err)
+            res.status(500).send('Cannot get bugs')
+        })
+})
+
 const port = 3030
 app.get('/', (req, res) => res.send('Hello there'))
 app.listen(port, () =>
