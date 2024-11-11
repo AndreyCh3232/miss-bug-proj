@@ -68,13 +68,16 @@ app.put('/api/bug/:bugId', (req, res) => {
 
 // Delete a bug
 app.delete('/api/bug/:bugId', (req, res) => {
+    const userId = req.cookies.loginToken
     const { bugId } = req.params
-    bugService.remove(bugId)
-        .then(() => res.send('Bug removed'))
-        .catch(err => {
-            loggerService.error(`Failed to remove bug with ID: ${req.params.bugId}`, err)
-            res.status(500).send('Cannot remove bug')
+
+    bugService.getById(bugId)
+        .then(bug => {
+            if (bug.creator._id !== userId) return res.status(403).send('Unauthorized')
+            return bugService.remove(bugId)
         })
+        .then(() => res.send('Bug removed'))
+        .catch(err => res.status(500).send('Cannot remove bug'))
 })
 
 // Auth API
