@@ -11,7 +11,7 @@ export const bugService = {
     remove,
 }
 
-function query({ sortBy, sortDir, pageIdx, pageSize, txt, minSeverity, labels } = {}) {
+function query({ sortBy, sortDir = 1, pageIdx = 0, pageSize = PAGE_SIZE, txt, minSeverity, labels } = {}) {
     var filteredBugs = bugs
 
     // Filtering
@@ -41,7 +41,7 @@ function query({ sortBy, sortDir, pageIdx, pageSize, txt, minSeverity, labels } 
     }
 
     // Paging
-    const startIdx = pageIdx * pageSize;
+    const startIdx = pageIdx * pageSize
     filteredBugs = filteredBugs.slice(startIdx, startIdx + pageSize)
 
     return Promise.resolve(bugs)
@@ -61,9 +61,11 @@ function remove(bugId) {
 function save(bugToSave) {
     if (bugToSave._id) {
         const bugIdx = bugs.findIndex((bug) => bug._id === bugToSave._id)
+        if (bugIdx === -1) return Promise.reject(`Cannot find bug with ID ${bugToSave._id}`)
         bugs[bugIdx] = bugToSave
     } else {
         bugToSave._id = utilService.makeId()
+        bugToSave.createdAt = Date.now()
         bugs.unshift(bugToSave)
     }
     return _saveBugsToFile().then(() => bugToSave)

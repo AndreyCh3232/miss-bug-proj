@@ -1,50 +1,46 @@
 [
-    {
-        "_id": "b101",
-        "title": "Infinite Loop Detected",
-        "description": "Occurs when function calls itself infinitely.",
-        "severity": 4,
-        "createdAt": 1542107359454,
-        "labels": [
-            "critical",
-            "need-CR",
-            "dev-branch"
-        ]
-    },
-    {
-        "_id": "b102",
-        "title": "Keyboard Not Found",
-        "description": "This issue arises when the computer can't find the keyboard.",
-        "severity": 3,
-        "createdAt": 1542107359655,
-        "labels": [
-            "hardware-issue",
-            "user-error",
-            "urgent"
-        ]
-    },
-    {
-        "_id": "b103",
-        "title": "404 Coffee Not Found",
-        "description": "Coffee not available, perhaps a missing coffee machine?",
-        "severity": 2,
-        "createdAt": 1542107352651,
-        "labels": [
-            "low-priority",
-            "funny",
-            "monitor-supplies"
-        ]
-    },
-    {
-        "_id": "b104",
-        "title": "Unexpected Response",
-        "description": "Received an unexpected response from the server.",
-        "severity": 1,
-        "createdAt": 1542117352650,
-        "labels": [
-            "network-issue",
-            "backend",
-            "investigation-needed"
-        ]
+  {
+    "_id": "b101",
+    "title": "Infinite Loop Detected",
+    "description": "Occurs when function calls itself infinitely.",
+    "severity": 4,
+    "createdAt": 1542107359454,
+    "creator": {
+      "_id": "u101",
+      "fullname": "Puki Ja"
     }
+  },
+  {
+    "_id": "b102",
+    "title": "Keyboard Not Found",
+    "description": "This issue arises when the computer can't find the keyboard.",
+    "severity": 3,
+    "createdAt": 1542107359655,
+    "creator": {
+      "_id": "u102",
+      "fullname": "Muki Ra"
+    }
+  },
+  {
+    "_id": "b103",
+    "title": "404 Coffee Not Found",
+    "description": "Coffee not available, perhaps a missing coffee machine?",
+    "severity": 2,
+    "createdAt": 1542107352651,
+    "creator": {
+      "_id": "u103",
+      "fullname": "Luki Sa"
+    }
+  },
+  {
+    "_id": "b104",
+    "title": "Unexpected Response",
+    "description": "Received an unexpected response from the server.",
+    "severity": 1,
+    "createdAt": 1542117352650,
+    "creator": {
+      "_id": "u104",
+      "fullname": "Zuki Na"
+    }
+  }
 ]

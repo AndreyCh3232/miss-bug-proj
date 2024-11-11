@@ -22,7 +22,7 @@ export function BugIndex() {
       .then(setBugs)
       .catch((err) => {
         showErrorMsg('cant load bugs')
-        console.error(err)
+        console.error('Error loading bugs:', err)
       })
   }
 
@@ -49,7 +49,7 @@ export function BugIndex() {
       .save(bug)
       .then((savedBug) => {
         setBugs((prevBugs) => [...bugs, savedBug])
-        showSuccessMsg('Bug added  successfully')
+        showSuccessMsg('Bug added successfully')
       })
       .catch((err) => {
         console.log('Error adding bug:', err)

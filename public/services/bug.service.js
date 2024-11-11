@@ -29,24 +29,26 @@ function query(filterBy = {}) {
 }
 
 function getById(bugId) {
-  return axios.get(BASE_URL + bugId).then((res) => res.data)
+  return axios
+    .get(`${BASE_URL}${bugId}`)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error(`Error getting bug with ID ${bugId}:`, err)
+      throw err
+    })
 }
 
 function remove(bugId) {
-  return axios.get(BASE_URL + bugId + '/remove').then((res) => res.data)
+  return axios
+    .delete(`${BASE_URL}${bugId}`)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error(`Error removing bug with ID ${bugId}:`, err)
+      throw err
+    })
 }
 
 function save(bug) {
-  // const url = BASE_URL + 'save'
-  // let queryParams = `?title=${bug.title}&severity=${bug.severity}&description=${bug.description}`
-  // if (bug._id) queryParams += `&_id=${bug._id}`
-  // return axios
-  //   .get(url + queryParams)
-  //   .then((res) => res.data)
-  //   .catch((err) => {
-  //     console.log('err:', err)
-  //   })
-
   if (bug._id) {
     return axios
       .put(`${BASE_URL}${bug._id}`, bug)
