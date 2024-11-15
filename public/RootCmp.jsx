@@ -7,6 +7,8 @@ import { Home } from './pages/Home.jsx'
 import { BugIndex } from './pages/BugIndex.jsx'
 import { BugDetails } from './pages/BugDetails.jsx'
 import { AboutUs } from './pages/AboutUs.jsx'
+import { UserProfile } from './pages/UserProfile.jsx'
+import { AdminDashboard } from './pages/AdminDashboard.jsx'
 
 export function App() {
     return (
@@ -19,6 +21,8 @@ export function App() {
                         <Route path="/bug" element={<BugIndex />} />
                         <Route path="/bug/:bugId" element={<BugDetails />} />
                         <Route path="/about" element={<AboutUs />} />
+                        <Route path="/user" element={<UserProfile />} />
+                        <Route path="/admin" element={<AdminDashboard />} />
                     </Routes>
                 </main>
                 <AppFooter />

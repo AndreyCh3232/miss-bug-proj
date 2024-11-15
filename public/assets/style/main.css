@@ -274,3 +274,17 @@ legend {
   align-items: center;
   font-size: 1.2rem;
 }
+
+.auth-container input {
+  margin: 10px 5px;
+}
+
+.auth-container h2 {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-container .button-container {
+  display: flex;
+  justify-content: center;
+}

@@ -1,6 +1,8 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
+
 import { bugService } from './services/bug.service.js'
+import { userService } from './services/user.service.js'
 import { loggerService } from './services/logger.service.js'
 import PDFDocument from 'pdfkit'
 
@@ -68,35 +70,45 @@ app.put('/api/bug/:bugId', (req, res) => {
 
 // Delete a bug
 app.delete('/api/bug/:bugId', (req, res) => {
-    const userId = req.cookies.loginToken
-    const { bugId } = req.params
+    const user = userService.validateToken(req.cookies.loginToken)
+    if (!user) return res.status(401).send('Not logged in')
 
+    const { bugId } = req.params
     bugService.getById(bugId)
         .then(bug => {
-            if (bug.creator._id !== userId) return res.status(403).send('Unauthorized')
+            if (bug.creator._id !== user._id) return res.status(403).send('Unauthorized')
             return bugService.remove(bugId)
         })
         .then(() => res.send('Bug removed'))
         .catch(err => res.status(500).send('Cannot remove bug'))
 })
 
-// Auth API
-app.post('/api/auth/signup', (req, res) => {
-    const { username, password, fullname } = req.body
-    userService.signup(username, password, fullname)
-        .then(user => res.json(user))
-        .catch(err => res.status(500).send('Failed to signup'))
-})
-
+// Auth API: Login, Signup, Logout
 app.post('/api/auth/login', (req, res) => {
     const { username, password } = req.body
-    userService.login(username, password)
+    userService.checkLogin({ username, password })
         .then(user => {
-            res.cookie('loginToken', user._id, { httpOnly: true })
+            const token = userService.getLoginToken(user)
+            res.cookie('loginToken', token, { httpOnly: true })
             res.json({ _id: user._id, fullname: user.fullname })
         })
         .catch(() => res.status(401).send('Invalid username or password'))
 })
+
+app.post('/api/auth/signup', (req, res) => {
+    const credentials = req.body
+    userService.save(credentials)
+        .then(user => {
+            if (user) {
+                const loginToken = userService.getLoginToken(user)
+                res.cookie('loginToken', loginToken)
+                res.send(user)
+            } else {
+                res.status(400).send('Cannot signup')
+            }
+        })
+})
+
 
 app.post('/api/auth/logout', (req, res) => {
     res.clearCookie('loginToken')
